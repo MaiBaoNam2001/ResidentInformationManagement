@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Add User</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+
+<body style="background: beige">
+<div class="container">
+    <div class="table-wrapper">
+        <div class="table-title">
+            <div class="row">
+                <div class="col-sm-6">
+                    <h2><b>Manage Users</b></h2>
+                </div>
+                <div class="col-sm-6"></div>
+            </div>
+        </div>
+        <form th:action="@{/admin/users/add}" th:object="${user}" method="post">
+            <div class="modal-header">
+                <h4 class="modal-title">Add User</h4>
+            </div>
+            <div class="modal-body">
+                <div th:if="${#fields.hasAnyErrors()}" class="alert alert-danger">
+                    <ul th:each="error : ${#fields.allErrors()}">
+                        <li th:text="${error}"></li>
+                    </ul>
+                </div>
+                <div class="form-group">
+                    <label>Name</label>
+                    <select name="resident" id="resident" class="form-control"></select>
+                </div>
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" th:field="*{username}" id="username" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" th:field="*{password}" id="password" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Created Date</label>
+                    <input type="date" th:field="*{createdDate}" id="createdDate" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Role</label>
+                    <select name="role" id="role" class="form-control"></select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <input type="submit" class="btn btn-success" value="Add">
+                <input type="button" class="btn btn-default" value="Back">
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+<script th:src="@{/js/user.js}"></script>
+<script>
+    window.onload = function () {
+        loadSelectData(`http://${window.location.host}/api/residents`, "resident");
+        loadSelectData(`http://${window.location.host}/api/roles`, "role");
+    }
+</script>
+</html>

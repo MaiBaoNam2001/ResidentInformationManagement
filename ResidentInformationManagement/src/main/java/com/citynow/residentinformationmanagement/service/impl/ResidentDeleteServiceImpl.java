@@ -21,7 +21,7 @@ public class ResidentDeleteServiceImpl extends BaseService<ResidentDelete.Input,
 
     @Override
     protected Output doExecute(Input input) {
-        Resident resident = residentRepository.findById(input.getId()).get();
+        Resident resident = residentRepository.findById(input.getId()).orElseThrow();
         residentRepository.delete(resident);
         return modelConverter.map(resident, Output.class);
     }

@@ -4,7 +4,7 @@ plugins {
     id 'java'
 }
 
-group = 'com.mbn'
+group = 'com.citynow'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
@@ -23,11 +23,12 @@ dependencies {
     implementation 'org.mapstruct:mapstruct-processor:1.5.2.Final'
     implementation 'org.apache.commons:commons-lang3:3.12.0'
     implementation 'org.apache.commons:commons-collections4:4.4'
-    implementation 'mysql:mysql-connector-java:8.0.30'
+    implementation 'org.postgresql:postgresql:42.5.0'
+    implementation 'org.modelmapper:modelmapper:3.1.0'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.7.4'
-
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation:2.7.4'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'

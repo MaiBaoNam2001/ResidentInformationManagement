@@ -20,7 +20,7 @@ public class ResidentFindByIdServiceImpl extends BaseService<ResidentFindById.In
 
     @Override
     protected Output doExecute(Input input) {
-        return modelConverter.map(residentRepository.findById(input.getId()).get(), Output.class);
+        return modelConverter.map(residentRepository.findById(input.getId()).orElseThrow(), Output.class);
     }
 
     @Override

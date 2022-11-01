@@ -100,6 +100,10 @@ table.table td a:hover {
     color: #2196F3;
 }
 
+table.table td a.detail {
+    color: #5107ff;
+}
+
 table.table td a.edit {
     color: #FFC107;
 }
@@ -263,7 +267,13 @@ table.table .avatar {
     font-weight: normal;
 }
 
-a.disabled {
-    pointer-events: none;
-    cursor: default;
+label[for=file] {
+    display: inline-block;
+    background-color: green;
+    color: white;
+    padding: 0.5rem;
+    font-family: sans-serif;
+    border-radius: 0.3rem;
+    cursor: pointer;
+    margin-top: 1rem;
 }

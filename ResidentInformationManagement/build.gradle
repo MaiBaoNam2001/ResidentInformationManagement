@@ -1,6 +1,15 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.liquibase:liquibase-gradle-plugin:2.0.4"
+    }
+}
 plugins {
     id 'org.springframework.boot' version '2.7.4'
     id 'io.spring.dependency-management' version '1.0.14.RELEASE'
+    id 'org.liquibase.gradle' version '2.0.4'
     id 'java'
 }
 
@@ -19,21 +28,41 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.mapstruct:mapstruct:1.5.2.Final'
-    implementation 'org.mapstruct:mapstruct-processor:1.5.2.Final'
+    liquibaseRuntime 'org.liquibase:liquibase-core:4.17.1'
+    liquibaseRuntime 'org.liquibase:liquibase-groovy-dsl:3.0.2'
+    liquibaseRuntime 'org.postgresql:postgresql:42.5.0'
+
+    implementation 'org.liquibase:liquibase-core:4.17.1'
+    implementation 'org.apache.poi:poi-ooxml:5.2.3'
+    implementation 'com.vladmihalcea:hibernate-types-52:2.20.0'
+    implementation 'org.mapstruct:mapstruct:1.5.3.Final'
+    implementation 'org.mapstruct:mapstruct-processor:1.5.3.Final'
     implementation 'org.apache.commons:commons-lang3:3.12.0'
     implementation 'org.apache.commons:commons-collections4:4.4'
     implementation 'org.postgresql:postgresql:42.5.0'
     implementation 'org.modelmapper:modelmapper:3.1.0'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.7.4'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.7.5'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-validation:2.7.4'
+    implementation 'org.springframework.boot:spring-boot-starter-validation:2.7.5'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
+apply plugin: "org.liquibase.gradle"
+
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+liquibase {
+    activities {
+        main {
+            changeLogFile "./src/main/resources/db/changelog.xml"
+            url "jdbc:postgresql://localhost:5432/resident_management_db"
+            username "postgres"
+            password "12345678"
+        }
+    }
 }

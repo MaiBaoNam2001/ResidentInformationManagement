@@ -27,4 +27,5 @@ public class CustomerRegisterResponse {
     private boolean motorbikeCard;
     private boolean carCard;
     private String apartmentRegisterId;
+    private boolean deleted;
 }

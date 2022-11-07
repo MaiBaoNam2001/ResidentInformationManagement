@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,7 +30,7 @@ public class ApartmentRegisterFindByApartmentIdServiceImpl extends BaseService<A
     protected List<Output> doExecute(Input input) {
         List<ApartmentRegister> apartmentRegisters = apartmentRegisterRepository.findByApartmentId(input.getApartmentId());
         List<Output> outputs = apartmentRegisters.stream().map(apartmentRegisterMapper::toApartmentRegisterFindByApartmentIdOutput).collect(Collectors.toList());
-        outputs = outputs.stream().sorted(Comparator.comparing(ApartmentRegisterFindByApartmentId.Output::isHost).reversed()).collect(Collectors.toList());
+        outputs = outputs.stream().filter(Predicate.not(ApartmentRegisterFindByApartmentId.Output::isDeleted)).sorted(Comparator.comparing(ApartmentRegisterFindByApartmentId.Output::isHost).reversed()).collect(Collectors.toList());
         return outputs;
     }
 

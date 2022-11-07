@@ -30,7 +30,11 @@ $(function () {
                 console.log(data);
                 $('#customers').empty();
                 if (data.length > 0) {
+                    let isEditCustomerSubmitArr = [];
+                    let editCustomerDataArr = [];
                     for (let i = 0; i < data.length; i++) {
+                        isEditCustomerSubmitArr[i] = false;
+                        editCustomerDataArr[i] = data[i];
                         $('#customers').append(`
                         <tr id="row_${data[i].id}">
                             <input type="hidden" class="form-control" id="apartmentRegister_${data[i].id}" value="${data[i].apartmentRegisterId}">
@@ -45,7 +49,7 @@ $(function () {
                                 <a href="#updateCustomerDetailsModel_${data[i].id}" class="edit" data-toggle="modal"><i class="material-icons"
                                                                                                  data-toggle="tooltip"
                                                                                                  title="Edit">&#xE254;</i></a>
-                                <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons"
+                                <a href="#deleteCustomerModal_${data[i].id}" class="delete" data-toggle="modal"><i class="material-icons"
                                                                                                      data-toggle="tooltip"
                                                                                                      title="Delete">&#xE872;</i></a>
                                 <a href="#seeCustomerDetailsModel_${data[i].id}" class="detail" data-toggle="modal"><i class="material-icons"
@@ -170,6 +174,27 @@ $(function () {
                                         </div>
                                     </div>
                                 </div>
+                                <!-- Delete Customer Modal HTML -->
+                                <div id="deleteCustomerModal_${data[i].id}" class="modal fade">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <form>
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title">Delete Customer</h4>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>Are you sure you want to delete this customer?</p>
+                                                    <p class="text-warning"><small>This action cannot be undone.</small></p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                                                    <input type="button" class="btn btn-danger" id="deleteSubmit_${data[i].id}" value="Delete">
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
                             </td>
                         </tr>  
                         `);
@@ -199,6 +224,7 @@ $(function () {
                                 data: JSON.stringify(customerUpdate),
                                 success: function (response) {
                                     if (response.status === 'FAIL') {
+                                        isEditCustomerSubmitArr[i] = false;
                                         $(`#alert_${data[i].id}`).removeClass('d-none')
                                         $(`#alert_${data[i].id}`).empty();
                                         $(`#alert_${data[i].id}`).append(`<ul id="errors_${data[i].id}"></ul>`);
@@ -206,6 +232,8 @@ $(function () {
                                             $(`#errors_${data[i].id}`).append(`<li>${response.result[j].defaultMessage}</li>`)
                                         }
                                     } else {
+                                        isEditCustomerSubmitArr[i] = true;
+                                        editCustomerDataArr[i] = response.result;
                                         $(`#updateCustomerDetailsModel_${data[i].id}`).modal('hide');
                                         let tds = $(`#row_${data[i].id}`).find('td');
                                         tds.eq(1).html(response.result.name);
@@ -242,9 +270,25 @@ $(function () {
                             });
                         });
 
+                        $(`#deleteSubmit_${data[i].id}`).on('click', function () {
+                            $(`#row_${data[i].id}`).addClass('d-none');
+                            $(`#deleteCustomerModal_${data[i].id}`).modal('hide');
+                        });
+
                         $(`#updateCustomerDetailsModel_${data[i].id}`).on('hidden.bs.modal', function () {
-                            if ($(`#alert_${data[i].id}`).html() !== '' || !$.fn.isUpdateCustomerModalValid(data[i].id)) {
-                                $(`#form_${data[i].id}`).trigger('reset');
+                            if (isEditCustomerSubmitArr[i] && $.fn.isUpdateCustomerModalValid(data[i].id)) {
+                                isEditCustomerSubmitArr[i] = false;
+                            } else {
+                                $(`#id_${data[i].id}`).val(editCustomerDataArr[i].id);
+                                $(`#name_${data[i].id}`).val(editCustomerDataArr[i].name);
+                                $(`#dateOfBirth_${data[i].id}`).val(editCustomerDataArr[i].dateOfBirth);
+                                $(`#gender_${data[i].id}`).val(editCustomerDataArr[i].gender);
+                                $(`#phone_${data[i].id}`).val(editCustomerDataArr[i].phone);
+                                $(`#email_${data[i].id}`).val(editCustomerDataArr[i].email);
+                                $(`#address_${data[i].id}`).val(editCustomerDataArr[i].address);
+                                $(`#type_${data[i].id}`).val(editCustomerDataArr[i].type);
+                                $(`#identityCard_${data[i].id}`).val(editCustomerDataArr[i].identityCard);
+                                $(`#registerDate_${data[i].id}`).val(editCustomerDataArr[i].registerDate);
                             }
                             $(`#alert_${data[i].id}`).empty();
                             $(`#alert_${data[i].id}`).addClass('d-none');
@@ -287,7 +331,11 @@ $(function () {
             success: function (data) {
                 console.log(data);
                 if (data.length > 0) {
+                    let isEditCustomerSubmitArr = [];
+                    let editCustomerDataArr = [];
                     for (let i = 0; i < data.length; i++) {
+                        isEditCustomerSubmitArr[i] = false;
+                        editCustomerDataArr[i] = data[i];
                         $('#customers').append(`
                         <tr id="row_${data[i].id}">
                             <input type="hidden" class="form-control" id="apartmentRegister_${data[i].id}">
@@ -302,7 +350,7 @@ $(function () {
                                 <a href="#updateCustomerDetailsModel_${data[i].id}" class="edit" data-toggle="modal"><i class="material-icons"
                                                                                                  data-toggle="tooltip"
                                                                                                  title="Edit">&#xE254;</i></a>
-                                <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons"
+                                <a href="#deleteCustomerModal_${data[i].id}" class="delete" data-toggle="modal"><i class="material-icons"
                                                                                                      data-toggle="tooltip"
                                                                                                      title="Delete">&#xE872;</i></a>
                                 <a href="#seeCustomerDetailsModel_${data[i].id}" class="detail" data-toggle="modal"><i class="material-icons"
@@ -427,6 +475,27 @@ $(function () {
                                         </div>
                                     </div>
                                 </div>
+                                <!-- Delete Customer Modal HTML -->
+                                <div id="deleteCustomerModal_${data[i].id}" class="modal fade">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <form>
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title">Delete Customer</h4>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>Are you sure you want to delete this customer?</p>
+                                                    <p class="text-warning"><small>This action cannot be undone.</small></p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                                                    <input type="button" class="btn btn-danger" id="deleteSubmit_${data[i].id}" value="Delete">
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
                             </td>
                         </tr>  
                         `);
@@ -452,6 +521,7 @@ $(function () {
                                 data: JSON.stringify(customerUpdate),
                                 success: function (response) {
                                     if (response.status === 'FAIL') {
+                                        isEditCustomerSubmitArr[i] = false;
                                         $(`#alert_${data[i].id}`).removeClass('d-none')
                                         $(`#alert_${data[i].id}`).empty();
                                         $(`#alert_${data[i].id}`).append(`<ul id="errors_${data[i].id}"></ul>`);
@@ -459,6 +529,8 @@ $(function () {
                                             $(`#errors_${data[i].id}`).append(`<li>${response.result[j].defaultMessage}</li>`)
                                         }
                                     } else {
+                                        isEditCustomerSubmitArr[i] = true;
+                                        editCustomerDataArr[i] = response.result;
                                         $(`#updateCustomerDetailsModel_${data[i].id}`).modal('hide');
                                         let tds = $(`#row_${data[i].id}`).find('td');
                                         tds.eq(1).html(response.result.name);
@@ -491,9 +563,23 @@ $(function () {
                             });
                         });
 
+                        $(`#deleteSubmit_${data[i].id}`).on('click', function () {
+                            $(`#row_${data[i].id}`).addClass('d-none');
+                            $(`#deleteCustomerModal_${data[i].id}`).modal('hide');
+                        });
+
                         $(`#updateCustomerDetailsModel_${data[i].id}`).on('hidden.bs.modal', function () {
-                            if ($(`#alert_${data[i].id}`).html() !== '' || !$.fn.isUpdateExcelCustomerModalValid(data[i].id)) {
-                                $(`#form_${data[i].id}`).trigger('reset');
+                            if (isEditCustomerSubmitArr[i] && $.fn.isUpdateExcelCustomerModalValid(data[i].id)) {
+                                isEditCustomerSubmitArr[i] = false;
+                            } else {
+                                $(`#id_${data[i].id}`).val(editCustomerDataArr[i].id);
+                                $(`#name_${data[i].id}`).val(editCustomerDataArr[i].name);
+                                $(`#dateOfBirth_${data[i].id}`).val(editCustomerDataArr[i].dateOfBirth);
+                                $(`#gender_${data[i].id}`).val(editCustomerDataArr[i].gender);
+                                $(`#phone_${data[i].id}`).val(editCustomerDataArr[i].phone);
+                                $(`#email_${data[i].id}`).val(editCustomerDataArr[i].email);
+                                $(`#address_${data[i].id}`).val(editCustomerDataArr[i].address);
+                                $(`#identityCard_${data[i].id}`).val(editCustomerDataArr[i].identityCard);
                             }
                             $(`#alert_${data[i].id}`).empty();
                             $(`#alert_${data[i].id}`).addClass('d-none');
@@ -538,7 +624,8 @@ $(function () {
             customerRegister.floorId = $('#floor').val();
             customerRegister.apartmentId = $('#apartment').val();
             customerRegister.parkingAreaId = $('#parkingArea').val();
-            hostCount = customerRegister.host ? hostCount + 1 : hostCount;
+            customerRegister.deleted = $(this).hasClass('d-none');
+            hostCount = customerRegister.host && !customerRegister.deleted ? hostCount + 1 : hostCount;
             customerRegisters.push(customerRegister);
         });
         console.log(customerRegisters);

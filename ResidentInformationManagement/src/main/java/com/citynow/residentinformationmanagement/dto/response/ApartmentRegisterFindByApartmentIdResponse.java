@@ -24,4 +24,5 @@ public class ApartmentRegisterFindByApartmentIdResponse implements Serializable 
     private JsonNode carCard;
     private boolean isHost;
     private LocalDate registerDate;
+    private boolean isDeleted;
 }

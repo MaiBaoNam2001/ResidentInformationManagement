@@ -31,5 +31,6 @@ public interface ApartmentRegisterFindByApartmentId extends IService<ApartmentRe
         private JsonNode carCard;
         private boolean isHost;
         private LocalDate registerDate;
+        private boolean isDeleted;
     }
 }

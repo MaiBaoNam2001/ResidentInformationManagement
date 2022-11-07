@@ -48,7 +48,8 @@ $$
             email         TEXT UNIQUE,
             address       TEXT,
             type          TEXT,
-            identity_card TEXT
+            identity_card TEXT,
+            is_deleted    BOOLEAN
         );
 
         CREATE TABLE IF NOT EXISTS apartment_register

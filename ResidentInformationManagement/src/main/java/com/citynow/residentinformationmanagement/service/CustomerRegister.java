@@ -30,6 +30,7 @@ public interface CustomerRegister extends IService<List<CustomerRegister.Input>,
         private boolean motorbikeCard;
         private boolean carCard;
         private String apartmentRegisterId;
+        private boolean deleted;
     }
 
     @Data
@@ -54,5 +55,6 @@ public interface CustomerRegister extends IService<List<CustomerRegister.Input>,
         private boolean motorbikeCard;
         private boolean carCard;
         private String apartmentRegisterId;
+        private boolean deleted;
     }
 }

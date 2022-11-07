@@ -290,28 +290,28 @@ $$
         ON CONFLICT DO NOTHING;
 
         INSERT INTO customer (id, name, date_of_birth, gender, phone, email, address, type,
-                              identity_card)
+                              identity_card, is_deleted)
         VALUES ('e858ecff', 'Nguyễn Thị Hồng Ngọc', '1997-07-22', 'Nữ', '0394857697', 'hongngoc.nguyenthi@gmail.com',
-                'Đồng Tháp', 'Cư dân', '318713762'),
+                'Đồng Tháp', 'Cư dân', '318713762', false),
                ('3bb5def1', 'Lê Thị Bảo Châu', '1997-10-10', 'Nữ', '0365464566', 'baochau.lethi@gmail.com', 'Đồng Tháp',
-                'Cư dân', '495873491'),
+                'Cư dân', '495873491', false),
                ('4d44389f', 'Bùi Thị Yến Nhi', '1997-04-20', 'Nữ', '0354657787',
                 'yennhi.buithi@gmail.com', 'An Giang',
-                'Cư dân', '472398479'),
+                'Cư dân', '472398479', false),
                ('47cae4e7', 'Trần Thị Như Quỳnh', '1998-05-18', 'Nữ', '0391157697', 'nhuquynh.tranthi@gmail.com',
-                'An Giang', 'Cư dân', '432947239'),
+                'An Giang', 'Cư dân', '432947239', false),
                ('473c2151', 'Nguyễn Đăng Khoa', '1994-10-10', 'Nam', '0444857697', 'dangkhoa.nguyen@gmail.com',
-                'Đồng Nai', 'Cư dân', '472384853'),
+                'Đồng Nai', 'Cư dân', '472384853', false),
                ('efe6a422', 'Trần Thị Anh Thư', '1998-04-10', 'Nữ', '0287532155', 'anhthu.tranthi@gmail.com',
-                'Đồng Nai', 'Cư dân', '137923719'),
+                'Đồng Nai', 'Cư dân', '137923719', false),
                ('87239f39', 'Nguyễn Bảo Duy', '2009-08-09', 'Nam', '0289632542', 'baoduy.nguyen@gmail.com', 'Đồng Nai',
-                'Cư dân', '573495743'),
+                'Cư dân', '573495743', false),
                ('a72c065d', 'Hồ Tuấn Hưng', '1999-05-20', 'Nam', '0444854697', 'tuanhung.ho@gmail.com', 'Nha Trang',
-                'Khách vãng lai', '435734563'),
+                'Khách vãng lai', '435734563', false),
                ('81400093', 'Hồ Thị Cẩm Tiên', '1996-10-04', 'Nữ', '0394457697', 'camtien.hothi@gmail.com', 'Lâm Đồng',
-                'Khách vãng lai', '458345656'),
+                'Khách vãng lai', '458345656', false),
                ('6d1c2ca7', 'Trần Thành Danh', '1995-10-10', 'Nam', '0394857497', 'thanhdanh.tran@gmail.com', 'Đà Lạt',
-                'Khách vãng lai', '567348756')
+                'Khách vãng lai', '567348756', false)
         ON CONFLICT DO NOTHING;
 
         INSERT INTO parking_area(id, name, building_id)

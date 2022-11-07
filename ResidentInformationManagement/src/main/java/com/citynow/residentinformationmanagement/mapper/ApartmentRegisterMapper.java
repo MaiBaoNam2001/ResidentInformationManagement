@@ -42,6 +42,7 @@ public class ApartmentRegisterMapper {
         output.setCarCard(apartmentRegister.getCarCard());
         output.setHost(apartmentRegister.getIsHost());
         output.setRegisterDate(apartmentRegister.getRegisterDate());
+        output.setDeleted(apartmentRegister.getCustomer().getIsDeleted());
         return output;
     }
 
@@ -56,6 +57,7 @@ public class ApartmentRegisterMapper {
         customer.setAddress(input.getAddress());
         customer.setType(input.getType());
         customer.setIdentityCard(input.getIdentityCard());
+        customer.setIsDeleted(input.isDeleted());
         ApartmentRegister apartmentRegister = new ApartmentRegister();
         apartmentRegister.setId(input.getApartmentRegisterId() != "" ? input.getApartmentRegisterId() : uuidUtils.getUUID());
         apartmentRegister.setCustomer(customerRepository.save(customer));

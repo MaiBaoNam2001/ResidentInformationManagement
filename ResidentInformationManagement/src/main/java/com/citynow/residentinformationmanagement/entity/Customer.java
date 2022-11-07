@@ -46,6 +46,9 @@ public class Customer {
     @Type(type = "org.hibernate.type.TextType")
     private String identityCard;
 
+    @Column(name = "is_deleted")
+    private Boolean isDeleted;
+
     @OneToMany(mappedBy = "customer")
     private Set<ApartmentRegister> apartmentRegisters = new LinkedHashSet<>();
 
@@ -122,6 +125,14 @@ public class Customer {
 
     public void setIdentityCard(String identityCard) {
         this.identityCard = identityCard;
+    }
+
+    public Boolean getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(Boolean isDeleted) {
+        this.isDeleted = isDeleted;
     }
 
     public Set<ApartmentRegister> getApartmentRegisters() {

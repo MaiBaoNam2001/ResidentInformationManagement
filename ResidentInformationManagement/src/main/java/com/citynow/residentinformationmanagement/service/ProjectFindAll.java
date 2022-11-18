@@ -5,15 +5,23 @@ import lombok.Data;
 
 import java.util.List;
 
-public interface ProjectFindAll extends IService<ProjectFindAll.Input, List<ProjectFindAll.Output>> {
-    class Input {
+public interface ProjectFindAll extends IService<ProjectFindAll.Input, ProjectFindAll.Output> {
 
-    }
+  class Input {
+
+  }
+
+  @Data
+  class Output {
+
+    private List<Project> projects;
 
     @Data
-    class Output {
-        private String id;
-        private String name;
-        private String area;
+    public static class Project {
+
+      private String id;
+      private String name;
+      private String area;
     }
+  }
 }

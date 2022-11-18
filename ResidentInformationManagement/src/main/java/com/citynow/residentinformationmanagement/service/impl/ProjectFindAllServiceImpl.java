@@ -11,22 +11,27 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ProjectFindAllServiceImpl extends BaseService<ProjectFindAll.Input, List<ProjectFindAll.Output>> implements ProjectFindAll {
-    private final ProjectRepository projectRepository;
-    private final ModelConverter modelConverter;
+public class ProjectFindAllServiceImpl extends
+    BaseService<ProjectFindAll.Input, ProjectFindAll.Output> implements ProjectFindAll {
 
-    @Override
-    protected void preExecute(Input input) {
+  private final ProjectRepository projectRepository;
+  private final ModelConverter modelConverter;
 
-    }
+  @Override
+  protected void preExecute(Input input) {
 
-    @Override
-    protected List<Output> doExecute(Input input) {
-        return modelConverter.mapAllByIterator(projectRepository.findAll(), Output.class);
-    }
+  }
 
-    @Override
-    protected void postExecute(Input input) {
+  @Override
+  protected Output doExecute(Input input) {
+    Output output = new Output();
+    output.setProjects(
+        modelConverter.mapAllByIterator(projectRepository.findAll(), Output.Project.class));
+    return output;
+  }
 
-    }
+  @Override
+  protected void postExecute(Input input) {
+
+  }
 }

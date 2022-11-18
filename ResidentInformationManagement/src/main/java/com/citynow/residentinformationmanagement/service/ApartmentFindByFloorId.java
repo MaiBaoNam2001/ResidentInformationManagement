@@ -5,16 +5,26 @@ import lombok.Data;
 
 import java.util.List;
 
-public interface ApartmentFindByFloorId extends IService<ApartmentFindByFloorId.Input, List<ApartmentFindByFloorId.Output>> {
-    @Data
-    class Input {
-        private String floorId;
-    }
+public interface ApartmentFindByFloorId extends
+    IService<ApartmentFindByFloorId.Input, ApartmentFindByFloorId.Output> {
+
+  @Data
+  class Input {
+
+    private String floorId;
+  }
+
+  @Data
+  class Output {
+
+    private List<Apartment> apartments;
 
     @Data
-    class Output {
-        private String id;
-        private String name;
-        private String floor_id;
+    public static class Apartment {
+
+      private String id;
+      private String name;
+      private String floor_id;
     }
+  }
 }

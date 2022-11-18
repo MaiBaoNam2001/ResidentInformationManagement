@@ -13,13 +13,16 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api")
 public class CustomerImportExcelDataController {
-    private final CustomerImportExcelData customerImportExcelData;
-    private final ModelConverter modelConverter;
 
-    @PostMapping("/customers/import-excel")
-    public List<CustomerImportExcelDataResponse> importCustomerDataFromExcel(@RequestParam(value = "file") MultipartFile multipartFile) {
-        CustomerImportExcelData.Input input = new CustomerImportExcelData.Input();
-        input.setMultipartFile(multipartFile);
-        return modelConverter.mapAllByIterator(customerImportExcelData.execute(input), CustomerImportExcelDataResponse.class);
-    }
+  private final CustomerImportExcelData customerImportExcelData;
+  private final ModelConverter modelConverter;
+
+  @PostMapping("/customers/import-excel")
+  public List<CustomerImportExcelDataResponse> importCustomerDataFromExcel(
+      @RequestParam(value = "file") MultipartFile multipartFile) {
+    CustomerImportExcelData.Input input = new CustomerImportExcelData.Input();
+    input.setMultipartFile(multipartFile);
+    return modelConverter.mapAllByIterator(customerImportExcelData.execute(input).getCustomers(),
+        CustomerImportExcelDataResponse.class);
+  }
 }

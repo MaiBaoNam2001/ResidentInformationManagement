@@ -15,13 +15,16 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api")
 public class BuildingFindByProjectIdController {
-    private final BuildingFindByProjectId buildingFindByProjectId;
-    private final ModelConverter modelConverter;
 
-    @GetMapping("/buildings/{projectId}")
-    public List<BuildingFindByProjectIdResponse> findBuildingsByProjectId(@PathVariable(value = "projectId") String projectId) {
-        BuildingFindByProjectId.Input input = new BuildingFindByProjectId.Input();
-        input.setProjectId(projectId);
-        return modelConverter.mapAllByIterator(buildingFindByProjectId.execute(input), BuildingFindByProjectIdResponse.class);
-    }
+  private final BuildingFindByProjectId buildingFindByProjectId;
+  private final ModelConverter modelConverter;
+
+  @GetMapping("/buildings/{projectId}")
+  public List<BuildingFindByProjectIdResponse> findBuildingsByProjectId(
+      @PathVariable(value = "projectId") String projectId) {
+    BuildingFindByProjectId.Input input = new BuildingFindByProjectId.Input();
+    input.setProjectId(projectId);
+    return modelConverter.mapAllByIterator(buildingFindByProjectId.execute(input).getBuildings(),
+        BuildingFindByProjectIdResponse.class);
+  }
 }

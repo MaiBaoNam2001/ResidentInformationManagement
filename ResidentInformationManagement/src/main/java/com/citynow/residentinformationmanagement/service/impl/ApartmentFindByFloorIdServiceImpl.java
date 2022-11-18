@@ -11,22 +11,29 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ApartmentFindByFloorIdServiceImpl extends BaseService<ApartmentFindByFloorId.Input, List<ApartmentFindByFloorId.Output>> implements ApartmentFindByFloorId {
-    private final ApartmentRepository apartmentRepository;
-    private final ModelConverter modelConverter;
+public class ApartmentFindByFloorIdServiceImpl extends
+    BaseService<ApartmentFindByFloorId.Input, ApartmentFindByFloorId.Output> implements
+    ApartmentFindByFloorId {
 
-    @Override
-    protected void preExecute(Input input) {
+  private final ApartmentRepository apartmentRepository;
+  private final ModelConverter modelConverter;
 
-    }
+  @Override
+  protected void preExecute(Input input) {
 
-    @Override
-    protected List<Output> doExecute(Input input) {
-        return modelConverter.mapAllByIterator(apartmentRepository.findByFloorId(input.getFloorId()), Output.class);
-    }
+  }
 
-    @Override
-    protected void postExecute(Input input) {
+  @Override
+  protected Output doExecute(Input input) {
+    Output output = new Output();
+    output.setApartments(
+        modelConverter.mapAllByIterator(apartmentRepository.findByFloorId(input.getFloorId()),
+            Output.Apartment.class));
+    return output;
+  }
 
-    }
+  @Override
+  protected void postExecute(Input input) {
+
+  }
 }

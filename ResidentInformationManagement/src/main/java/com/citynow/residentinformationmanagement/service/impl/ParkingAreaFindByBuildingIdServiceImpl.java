@@ -11,22 +11,28 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ParkingAreaFindByBuildingIdServiceImpl extends BaseService<ParkingAreaFindByBuildingId.Input, List<ParkingAreaFindByBuildingId.Output>> implements ParkingAreaFindByBuildingId {
-    private final ParkingAreaRepository parkingAreaRepository;
-    private final ModelConverter modelConverter;
+public class ParkingAreaFindByBuildingIdServiceImpl extends
+    BaseService<ParkingAreaFindByBuildingId.Input, ParkingAreaFindByBuildingId.Output> implements
+    ParkingAreaFindByBuildingId {
 
-    @Override
-    protected void preExecute(Input input) {
+  private final ParkingAreaRepository parkingAreaRepository;
+  private final ModelConverter modelConverter;
 
-    }
+  @Override
+  protected void preExecute(Input input) {
 
-    @Override
-    protected List<Output> doExecute(Input input) {
-        return modelConverter.mapAllByIterator(parkingAreaRepository.findByBuildingId(input.getBuildingId()), Output.class);
-    }
+  }
 
-    @Override
-    protected void postExecute(Input input) {
+  @Override
+  protected Output doExecute(Input input) {
+    Output output = new Output();
+    output.setParkingAreas(modelConverter.mapAllByIterator(
+        parkingAreaRepository.findByBuildingId(input.getBuildingId()), Output.ParkingArea.class));
+    return output;
+  }
 
-    }
+  @Override
+  protected void postExecute(Input input) {
+
+  }
 }

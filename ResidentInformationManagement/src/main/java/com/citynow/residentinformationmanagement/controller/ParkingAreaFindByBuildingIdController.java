@@ -15,13 +15,17 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api")
 public class ParkingAreaFindByBuildingIdController {
-    private final ParkingAreaFindByBuildingId parkingAreaFindByBuildingId;
-    private final ModelConverter modelConverter;
 
-    @GetMapping("/parking-areas/{buildingId}")
-    public List<ParkingAreaFindByBuildingIdResponse> findParkingAreasByBuildingId(@PathVariable(value = "buildingId") String buildingId) {
-        ParkingAreaFindByBuildingId.Input input = new ParkingAreaFindByBuildingId.Input();
-        input.setBuildingId(buildingId);
-        return modelConverter.mapAllByIterator(parkingAreaFindByBuildingId.execute(input), ParkingAreaFindByBuildingIdResponse.class);
-    }
+  private final ParkingAreaFindByBuildingId parkingAreaFindByBuildingId;
+  private final ModelConverter modelConverter;
+
+  @GetMapping("/parking-areas/{buildingId}")
+  public List<ParkingAreaFindByBuildingIdResponse> findParkingAreasByBuildingId(
+      @PathVariable(value = "buildingId") String buildingId) {
+    ParkingAreaFindByBuildingId.Input input = new ParkingAreaFindByBuildingId.Input();
+    input.setBuildingId(buildingId);
+    return modelConverter.mapAllByIterator(
+        parkingAreaFindByBuildingId.execute(input).getParkingAreas(),
+        ParkingAreaFindByBuildingIdResponse.class);
+  }
 }

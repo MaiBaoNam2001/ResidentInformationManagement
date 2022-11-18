@@ -1,7 +1,6 @@
 package com.citynow.residentinformationmanagement.service.impl;
 
 import com.citynow.residentinformationmanagement.common.mapper.ModelConverter;
-import com.citynow.residentinformationmanagement.entity.ApartmentRegister;
 import com.citynow.residentinformationmanagement.repository.ApartmentRepository;
 import com.citynow.residentinformationmanagement.service.ApartmentFindByFloorId;
 import com.citynow.residentinformationmanagement.service.ApartmentFindByFloorId.Input;
@@ -16,7 +15,7 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class ApartmentFindByFloorIdTest {
+public class ApartmentFindByFloorIdServiceImplTest {
 
   @Mock
   private ApartmentRepository apartmentRepository;

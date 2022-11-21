@@ -7,7 +7,8 @@ import java.util.UUID;
 
 @Component
 public class UUIDUtils {
-    public String getUUID() {
-        return StringUtils.left(String.valueOf(UUID.randomUUID()), 8);
-    }
+
+  public static String getUUID() {
+    return StringUtils.left(String.valueOf(UUID.randomUUID()), 8);
+  }
 }

@@ -11,22 +11,29 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class BuildingFindByProjectIdServiceImpl extends BaseService<BuildingFindByProjectId.Input, List<BuildingFindByProjectId.Output>> implements BuildingFindByProjectId {
-    private final BuildingRepository buildingRepository;
-    private final ModelConverter modelConverter;
+public class BuildingFindByProjectIdServiceImpl extends
+    BaseService<BuildingFindByProjectId.Input, BuildingFindByProjectId.Output> implements
+    BuildingFindByProjectId {
 
-    @Override
-    protected void preExecute(Input input) {
+  private final BuildingRepository buildingRepository;
+  private final ModelConverter modelConverter;
 
-    }
+  @Override
+  protected void preExecute(Input input) {
 
-    @Override
-    protected List<Output> doExecute(Input input) {
-        return modelConverter.mapAllByIterator(buildingRepository.findByProjectId(input.getProjectId()), Output.class);
-    }
+  }
 
-    @Override
-    protected void postExecute(Input input) {
+  @Override
+  protected Output doExecute(Input input) {
+    Output output = new Output();
+    output.setBuildings(
+        modelConverter.mapAllByIterator(buildingRepository.findByProjectId(input.getProjectId()),
+            Output.Building.class));
+    return output;
+  }
 
-    }
+  @Override
+  protected void postExecute(Input input) {
+
+  }
 }

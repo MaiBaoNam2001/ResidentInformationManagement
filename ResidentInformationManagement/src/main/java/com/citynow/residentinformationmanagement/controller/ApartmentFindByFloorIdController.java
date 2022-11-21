@@ -15,13 +15,16 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api")
 public class ApartmentFindByFloorIdController {
-    private final ApartmentFindByFloorId apartmentFindByFloorId;
-    private final ModelConverter modelConverter;
 
-    @GetMapping("/apartments/{floorId}")
-    public List<ApartmentFindByFloorIdResponse> findApartmentsByFloorId(@PathVariable(value = "floorId") String floorId) {
-        ApartmentFindByFloorId.Input input = new ApartmentFindByFloorId.Input();
-        input.setFloorId(floorId);
-        return modelConverter.mapAllByIterator(apartmentFindByFloorId.execute(input), ApartmentFindByFloorIdResponse.class);
-    }
+  private final ApartmentFindByFloorId apartmentFindByFloorId;
+  private final ModelConverter modelConverter;
+
+  @GetMapping("/apartments/{floorId}")
+  public List<ApartmentFindByFloorIdResponse> findApartmentsByFloorId(
+      @PathVariable(value = "floorId") String floorId) {
+    ApartmentFindByFloorId.Input input = new ApartmentFindByFloorId.Input();
+    input.setFloorId(floorId);
+    return modelConverter.mapAllByIterator(apartmentFindByFloorId.execute(input).getApartments(),
+        ApartmentFindByFloorIdResponse.class);
+  }
 }

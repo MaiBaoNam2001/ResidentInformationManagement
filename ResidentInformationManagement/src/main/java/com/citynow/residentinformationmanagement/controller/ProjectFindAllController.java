@@ -14,11 +14,14 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api")
 public class ProjectFindAllController {
-    private final ProjectFindAll projectFindAll;
-    private final ModelConverter modelConverter;
 
-    @GetMapping("/projects")
-    public List<ProjectFindAllResponse> findAllProjects() {
-        return modelConverter.mapAllByIterator(projectFindAll.execute(new ProjectFindAll.Input()), ProjectFindAllResponse.class);
-    }
+  private final ProjectFindAll projectFindAll;
+  private final ModelConverter modelConverter;
+
+  @GetMapping("/projects")
+  public List<ProjectFindAllResponse> findAllProjects() {
+    return modelConverter.mapAllByIterator(
+        projectFindAll.execute(new ProjectFindAll.Input()).getProjects(),
+        ProjectFindAllResponse.class);
+  }
 }

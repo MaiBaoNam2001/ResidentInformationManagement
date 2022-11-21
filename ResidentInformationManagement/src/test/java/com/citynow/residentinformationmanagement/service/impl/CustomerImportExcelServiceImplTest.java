@@ -44,7 +44,7 @@ public class CustomerImportExcelServiceImplTest {
   @Test
   public void whenMultipartFileIsExcelFileAndCorrectFormat_returnNonEmptyCustomerList()
       throws IOException {
-    File file = new File("src/main/resources/excel/resident_1.xlsx");
+    File file = new File("src/test/resources/excel/resident_1.xlsx");
     FileInputStream fileInputStream = new FileInputStream(file);
     MultipartFile multipartFile = new MockMultipartFile(file.getName(), fileInputStream);
     try (MockedStatic<ExcelUtils> excelUtilsMockedStatic = Mockito.mockStatic(ExcelUtils.class)) {
@@ -63,7 +63,7 @@ public class CustomerImportExcelServiceImplTest {
   @Test
   public void whenMultipartFileIsExcelFileAndIncorrectFormat_returnEmptyCustomerList()
       throws IOException {
-    File file = new File("src/main/resources/excel/resident_error.xlsx");
+    File file = new File("src/test/resources/excel/resident_error.xlsx");
     FileInputStream fileInputStream = new FileInputStream(file);
     MultipartFile multipartFile = new MockMultipartFile(file.getName(), fileInputStream);
     try (MockedStatic<ExcelUtils> excelUtilsMockedStatic = Mockito.mockStatic(ExcelUtils.class)) {
@@ -79,7 +79,7 @@ public class CustomerImportExcelServiceImplTest {
 
   @Test
   public void whenMultipartFileIsNotExcelFile_returnEmptyCustomerList() throws IOException {
-    File file = new File("src/main/resources/word/word.docx");
+    File file = new File("src/test/resources/word/word.docx");
     FileInputStream fileInputStream = new FileInputStream(file);
     MultipartFile multipartFile = new MockMultipartFile(file.getName(), fileInputStream);
     try (MockedStatic<ExcelUtils> excelUtilsMockedStatic = Mockito.mockStatic(ExcelUtils.class)) {

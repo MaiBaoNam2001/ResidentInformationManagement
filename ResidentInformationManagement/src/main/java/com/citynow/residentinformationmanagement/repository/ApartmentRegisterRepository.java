@@ -11,6 +11,10 @@ import java.util.List;
 
 @Repository
 public interface ApartmentRegisterRepository extends JpaRepository<ApartmentRegister, String> {
-    @Query("SELECT ar FROM ApartmentRegister ar WHERE ar.apartment.id = :apartmentId ")
-    List<ApartmentRegister> findByApartmentId(@Param("apartmentId") String apartmentId);
+
+  @Query("SELECT ar FROM ApartmentRegister ar WHERE ar.apartment.id = :apartmentId ")
+  List<ApartmentRegister> findByApartmentId(@Param("apartmentId") String apartmentId);
+
+  @Query("SELECT ar FROM ApartmentRegister  ar WHERE ar.customer.identityCard = :identityCard")
+  List<ApartmentRegister> findByIdentityCard(@Param("identityCard") String identityCard);
 }

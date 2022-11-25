@@ -11,6 +11,7 @@ import java.util.Optional;
 
 @Repository
 public interface ParkingAreaRepository extends JpaRepository<ParkingArea, String> {
-    @Query("SELECT p FROM ParkingArea p WHERE p.building.id = :buildingId")
-    List<ParkingArea> findByBuildingId(@Param("buildingId") String buildingId);
+
+  @Query("SELECT p FROM ParkingArea p WHERE p.building.id = :buildingId")
+  List<ParkingArea> findByBuildingId(@Param("buildingId") String buildingId);
 }

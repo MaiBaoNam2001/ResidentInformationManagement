@@ -11,9 +11,10 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class IdentityCardValidationListener {
 
+  private static final String IDENTITY_CARD_VALIDATION_QUEUE = "identity-card-validation.queue";
   private final IdentityCardValidation identityCardValidation;
 
-  @RabbitListener(queues = "${spring.rabbitmq.identity-card-validation.queue}")
+  @RabbitListener(queues = IDENTITY_CARD_VALIDATION_QUEUE)
   public IdentityCardValidation.Output validateIdentityCard(IdentityCardValidation.Input request) {
     log.info("Received Request -> {}", request.toString());
     return identityCardValidation.execute(request);

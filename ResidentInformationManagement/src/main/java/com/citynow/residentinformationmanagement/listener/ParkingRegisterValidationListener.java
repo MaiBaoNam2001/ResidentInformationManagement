@@ -11,9 +11,10 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ParkingRegisterValidationListener {
 
+  private static final String PARKING_REGISTER_VALIDATION_QUEUE = "parking-register-validation.queue";
   private final ParkingRegisterValidation parkingRegisterValidation;
 
-  @RabbitListener(queues = "${spring.rabbitmq.parking-register-validation.queue}")
+  @RabbitListener(queues = PARKING_REGISTER_VALIDATION_QUEUE)
   public ParkingRegisterValidation.Output validateParkingRegister(
       ParkingRegisterValidation.Input request) {
     log.info("Received Request -> {}", request.toString());

@@ -5,6 +5,7 @@ import com.citynow.residentinformationmanagement.filter.ApartmentRegisterFilter;
 import com.citynow.residentinformationmanagement.repository.ApartmentRegisterRepository;
 import com.citynow.residentinformationmanagement.repository.CustomerRepository;
 import com.citynow.residentinformationmanagement.repository.ParkingAreaRepository;
+import com.citynow.residentinformationmanagement.repository.ParkingRegisterRepository;
 import com.citynow.residentinformationmanagement.service.IdentityCardValidation;
 import com.citynow.residentinformationmanagement.service.template.BaseService;
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ public class IdentityCardValidationServiceImpl extends
   private final CustomerRepository customerRepository;
   private final ParkingAreaRepository parkingAreaRepository;
   private final ApartmentRegisterRepository apartmentRegisterRepository;
+  private final ParkingRegisterRepository parkingRegisterRepository;
 
   @Override
   protected void preExecute(Input input) {
@@ -37,12 +39,16 @@ public class IdentityCardValidationServiceImpl extends
     if (!customerRepository.existsByIdentityCard(input.getIdentityCard())) {
       errorMessages.add("The Identity Card does not exist");
     }
+
+    if (!parkingRegisterRepository.existsByLicensePlate(input.getLicensePlate())) {
+      errorMessages.add("The License Plate does not exist");
+    }
     List<ApartmentRegister> apartmentRegisters = apartmentRegisterRepository.findByIdentityCard(
         input.getIdentityCard());
     if (apartmentRegisters.stream().noneMatch(
-        apartmentRegister -> ApartmentRegisterFilter.filterByParkingAreaId(apartmentRegister,
-            input.getParkingAreaId()))) {
-      errorMessages.add("The Identity Card is not active");
+        apartmentRegister -> ApartmentRegisterFilter.filterByParkingAreaIdAndLicensePlate(
+            apartmentRegister, input.getParkingAreaId(), input.getLicensePlate()))) {
+      errorMessages.add("The Identity Card with this License Plate is not active");
     }
     if (!errorMessages.isEmpty()) {
       output.setStatusCode(500);

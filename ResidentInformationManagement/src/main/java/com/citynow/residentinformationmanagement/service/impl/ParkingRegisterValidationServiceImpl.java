@@ -1,7 +1,10 @@
 package com.citynow.residentinformationmanagement.service.impl;
 
 import com.citynow.residentinformationmanagement.common.util.UUIDUtils;
+import com.citynow.residentinformationmanagement.entity.ApartmentRegister;
 import com.citynow.residentinformationmanagement.entity.ParkingRegister;
+import com.citynow.residentinformationmanagement.filter.ApartmentRegisterFilter;
+import com.citynow.residentinformationmanagement.repository.ApartmentRegisterRepository;
 import com.citynow.residentinformationmanagement.repository.CustomerRepository;
 import com.citynow.residentinformationmanagement.repository.ParkingAreaRepository;
 import com.citynow.residentinformationmanagement.repository.ParkingRegisterRepository;
@@ -28,6 +31,8 @@ public class ParkingRegisterValidationServiceImpl extends
   private final ParkingAreaRepository parkingAreaRepository;
   private final ParkingTypeRepository parkingTypeRepository;
 
+  private final ApartmentRegisterRepository apartmentRegisterRepository;
+
   @Override
   protected void preExecute(Input input) {
 
@@ -43,22 +48,28 @@ public class ParkingRegisterValidationServiceImpl extends
         errorMessages.add(constraintViolation.getMessage());
       }
     }
+
     ParkingRegister parkingRegister = new ParkingRegister();
     parkingRegister.setId(UUIDUtils.getUUID());
     if (customerRepository.findByIdentityCard(input.getIdentityCard()).isPresent()) {
       parkingRegister.setCustomer(
           customerRepository.findByIdentityCard(input.getIdentityCard()).get());
     } else {
-      errorMessages.add("The Identity Card field is not present");
+      errorMessages.add("The Identity Card field does not exist");
     }
     if (parkingAreaRepository.findById(input.getParkingAreaId()).isPresent()) {
       parkingRegister.setParkingArea(
           parkingAreaRepository.findById(input.getParkingAreaId()).get());
     } else {
-      errorMessages.add("The Parking Area Id field is not present");
+      errorMessages.add("The Parking Area Id field does not exist");
     }
 
-    parkingRegister.setLicensePlate(input.getLicensePlate());
+    if (!parkingRegisterRepository.existsByLicensePlate(input.getLicensePlate())) {
+      parkingRegister.setLicensePlate(input.getLicensePlate());
+    } else {
+      errorMessages.add("The License Plate already exists");
+    }
+
     parkingRegister.setBrandName(input.getBrandName());
     parkingRegister.setColor(input.getColor());
     parkingRegister.setVehicleType(input.getVehicleType());
@@ -67,8 +78,17 @@ public class ParkingRegisterValidationServiceImpl extends
       parkingRegister.setParkingType(
           parkingTypeRepository.findById((long) input.getParkingTypeId()).get());
     } else {
-      errorMessages.add("The Parking Type Id field is not present");
+      errorMessages.add("The Parking Type Id field does not exist");
     }
+
+    List<ApartmentRegister> apartmentRegisters = apartmentRegisterRepository.findByIdentityCard(
+        input.getIdentityCard());
+    if (apartmentRegisters.stream().noneMatch(
+        apartmentRegister -> ApartmentRegisterFilter.filterByParkingAreaId(apartmentRegister,
+            input.getParkingAreaId()))) {
+      errorMessages.add("The Identity Card is not active");
+    }
+
     if (errorMessages.isEmpty()) {
       parkingRegisterRepository.save(parkingRegister);
       output.setStatusCode(200);

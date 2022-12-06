@@ -30,8 +30,8 @@ public class ParkingRegisterValidationServiceImpl extends
   private final CustomerRepository customerRepository;
   private final ParkingAreaRepository parkingAreaRepository;
   private final ParkingTypeRepository parkingTypeRepository;
-
   private final ApartmentRegisterRepository apartmentRegisterRepository;
+  private final ApartmentRegisterFilter apartmentRegisterFilter;
 
   @Override
   protected void preExecute(Input input) {
@@ -83,9 +83,11 @@ public class ParkingRegisterValidationServiceImpl extends
 
     List<ApartmentRegister> apartmentRegisters = apartmentRegisterRepository.findByIdentityCard(
         input.getIdentityCard());
-    if (apartmentRegisters.stream().noneMatch(
-        apartmentRegister -> ApartmentRegisterFilter.filterByParkingAreaId(apartmentRegister,
-            input.getParkingAreaId()))) {
+    final boolean apartmentRegistersNonExistentByParkingAreaId = apartmentRegisters.stream()
+        .noneMatch(
+            apartmentRegister -> apartmentRegisterFilter.filterByParkingAreaId(apartmentRegister,
+                input.getParkingAreaId()));
+    if (apartmentRegistersNonExistentByParkingAreaId) {
       errorMessages.add("The Identity Card is not active");
     }
 

@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
-@Component
 public class ExcelUtils {
 
   private static XSSFWorkbook workbook;

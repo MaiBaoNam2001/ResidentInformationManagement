@@ -7,6 +7,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class ApartmentRegisterFilter {
 
+  private static final String MOTORBIKE = "xe máy";
+  private static final String CAR = "xe hơi";
+
   public boolean filterByParkingAreaIdAndLicensePlate(ApartmentRegister apartmentRegister,
       String parkingAreaId, String licensePlate) {
     final String parkingAreaIdByMotorbikeCard = apartmentRegister.getMotorbikeCard().get("project")
@@ -19,11 +22,11 @@ public class ApartmentRegisterFilter {
     final boolean isMotorbikeCardRegisteredByLicensePlate = apartmentRegister.getCustomer()
         .getParkingRegisters().stream().anyMatch(
             parkingRegister -> parkingRegister.getLicensePlate().equals(licensePlate)
-                && parkingRegister.getVehicleType().equalsIgnoreCase("xe máy"));
+                && parkingRegister.getVehicleType().equalsIgnoreCase(MOTORBIKE));
     final boolean isCarCardRegisteredByLicensePlate = apartmentRegister.getCustomer()
         .getParkingRegisters().stream().anyMatch(
             parkingRegister -> parkingRegister.getLicensePlate().equals(licensePlate)
-                && parkingRegister.getVehicleType().equalsIgnoreCase("xe hơi"));
+                && parkingRegister.getVehicleType().equalsIgnoreCase(CAR));
     final boolean isParkingAreaIdExistedByMotorbikeCard = Objects.equals(
         parkingAreaIdByMotorbikeCard, parkingAreaId);
     final boolean isParkingAreaIdExistedByCarCard = Objects.equals(parkingAreaIdByCarCard,

@@ -23,6 +23,7 @@ public class IdentityCardValidationServiceImpl extends
   private final ParkingAreaRepository parkingAreaRepository;
   private final ApartmentRegisterRepository apartmentRegisterRepository;
   private final ParkingRegisterRepository parkingRegisterRepository;
+  private final ApartmentRegisterFilter apartmentRegisterFilter;
 
   @Override
   protected void preExecute(Input input) {
@@ -46,7 +47,7 @@ public class IdentityCardValidationServiceImpl extends
     List<ApartmentRegister> apartmentRegisters = apartmentRegisterRepository.findByIdentityCard(
         input.getIdentityCard());
     if (apartmentRegisters.stream().noneMatch(
-        apartmentRegister -> ApartmentRegisterFilter.filterByParkingAreaIdAndLicensePlate(
+        apartmentRegister -> apartmentRegisterFilter.filterByParkingAreaIdAndLicensePlate(
             apartmentRegister, input.getParkingAreaId(), input.getLicensePlate()))) {
       errorMessages.add("The Identity Card with this License Plate is not active");
     }

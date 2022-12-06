@@ -1,41 +1,58 @@
 $(function () {
-    const endpoint = 'http://localhost:8081/api';
+  const endpoint = 'http://localhost:8081/api';
 
-    $.fn.loadSelectData = function (endpoint, id, eventType) {
-        $('#file').val('');
-        $.ajax({
-            type: 'GET', url: endpoint, contentType: 'application/json', dataType: 'json', success: function (data) {
-                $(`#${id}`).empty();
-                for (let i = 0; i < data.length; i++) {
-                    $(`#${id}`).append(`<option value='${data[i].id}'>${data[i].name}</option>`);
-                }
-                $(`#${id}`).trigger(eventType);
-            }, error: function (jqXHR, status, error) {
-                console.log(error);
-            }
-        });
-    }
+  $.fn.loadSelectData = function (endpoint, id, eventType) {
+    $('#file').val('');
+    $.ajax({
+      type: 'GET',
+      url: endpoint,
+      contentType: 'application/json',
+      dataType: 'json',
+      success: function (data) {
+        $(`#${id}`).empty();
+        for (let i = 0; i < data.length; i++) {
+          $(`#${id}`).append(
+              `<option value='${data[i].id}'>${data[i].name}</option>`);
+        }
+        $(`#${id}`).trigger(eventType);
+      },
+      error: function (jqXHR, status, error) {
+        console.log(error);
+      }
+    });
+  }
 
-    $.fn.isUpdateCustomerModalValid = function (id) {
-        return $(`#name_${id}`).val() !== '' && $(`#dateOfBirth_${id}`).val() !== '' && $(`#gender_${id}`).val() !== '' && $(`#phone_${id}`).val() !== '' && $(`#email_${id}`).val() !== '' && $(`#address_${id}`).val() !== '' && $(`#type_${id}`).val() !== '' && $(`#identityCard_${id}`).val() !== '' && $(`#registerDate_${id}`).val() !== '';
-    }
+  $.fn.isUpdateCustomerModalValid = function (id) {
+    return $(`#name_${id}`).val() !== '' && $(`#dateOfBirth_${id}`).val() !== ''
+        && $(`#gender_${id}`).val() !== '' && $(`#phone_${id}`).val() !== ''
+        && $(`#email_${id}`).val() !== '' && $(`#address_${id}`).val() !== ''
+        && $(`#type_${id}`).val() !== '' && $(`#identityCard_${id}`).val()
+        !== '' && $(`#registerDate_${id}`).val() !== '';
+  }
 
-    $.fn.isUpdateExcelCustomerModalValid = function (id) {
-        return $(`#name_${id}`).val() !== '' && $(`#dateOfBirth_${id}`).val() !== '' && $(`#gender_${id}`).val() !== '' && $(`#phone_${id}`).val() !== '' && $(`#email_${id}`).val() !== '' && $(`#address_${id}`).val() !== '' && $(`#identityCard_${id}`).val() !== '';
-    }
+  $.fn.isUpdateExcelCustomerModalValid = function (id) {
+    return $(`#name_${id}`).val() !== '' && $(`#dateOfBirth_${id}`).val() !== ''
+        && $(`#gender_${id}`).val() !== '' && $(`#phone_${id}`).val() !== ''
+        && $(`#email_${id}`).val() !== '' && $(`#address_${id}`).val() !== ''
+        && $(`#identityCard_${id}`).val() !== '';
+  }
 
-    $.fn.loadCustomerData = function (endpoint) {
-        $.ajax({
-            type: 'GET', url: endpoint, contentType: 'application/json', dataType: 'json', success: function (data) {
-                console.log(data);
-                $('#customers').empty();
-                if (data.length > 0) {
-                    let isEditCustomerSubmitArr = [];
-                    let editCustomerDataArr = [];
-                    for (let i = 0; i < data.length; i++) {
-                        isEditCustomerSubmitArr[i] = false;
-                        editCustomerDataArr[i] = data[i];
-                        $('#customers').append(`
+  $.fn.loadCustomerData = function (endpoint) {
+    $.ajax({
+      type: 'GET',
+      url: endpoint,
+      contentType: 'application/json',
+      dataType: 'json',
+      success: function (data) {
+        console.log(data);
+        $('#customers').empty();
+        if (data.length > 0) {
+          let isEditCustomerSubmitArr = [];
+          let editCustomerDataArr = [];
+          for (let i = 0; i < data.length; i++) {
+            isEditCustomerSubmitArr[i] = false;
+            editCustomerDataArr[i] = data[i];
+            $('#customers').append(`
                         <tr id="row_${data[i].id}">
                             <input type="hidden" class="form-control" id="apartmentRegister_${data[i].id}" value="${data[i].apartmentRegisterId}">
                             <td>${data[i].id}</td>
@@ -198,145 +215,181 @@ $(function () {
                             </td>
                         </tr>  
                         `);
-                        $(`#host_${data[i].id}`).prop('checked', !!data[i].host);
-                        $(`#residentCard_${data[i].id}`).prop('checked', !!data[i].residentCard.active);
-                        $(`#motorbikeCard_${data[i].id}`).prop('checked', !!data[i].motorbikeCard.active);
-                        $(`#carCard_${data[i].id}`).prop('checked', !!data[i].carCard.active);
+            $(`#host_${data[i].id}`).prop('checked', !!data[i].host);
+            $(`#residentCard_${data[i].id}`).prop('checked',
+                !!data[i].residentCard.active);
+            $(`#motorbikeCard_${data[i].id}`).prop('checked',
+                !!data[i].motorbikeCard.active);
+            $(`#carCard_${data[i].id}`).prop('checked',
+                !!data[i].carCard.active);
 
-                        $(`#editSubmit_${data[i].id}`).on('click', function () {
-                            let customerUpdate = {};
-                            customerUpdate.id = $(`#id_${data[i].id}`).val();
-                            customerUpdate.name = $(`#name_${data[i].id}`).val();
-                            customerUpdate.dateOfBirth = $(`#dateOfBirth_${data[i].id}`).val();
-                            customerUpdate.gender = $(`#gender_${data[i].id}`).val();
-                            customerUpdate.phone = $(`#phone_${data[i].id}`).val();
-                            customerUpdate.email = $(`#email_${data[i].id}`).val();
-                            customerUpdate.address = $(`#address_${data[i].id}`).val();
-                            customerUpdate.type = $(`#type_${data[i].id}`).val();
-                            customerUpdate.identityCard = $(`#identityCard_${data[i].id}`).val();
-                            customerUpdate.registerDate = $(`#registerDate_${data[i].id}`).val();
+            $(`#editSubmit_${data[i].id}`).on('click', function () {
+              let customerUpdate = {};
+              customerUpdate.id = $(`#id_${data[i].id}`).val();
+              customerUpdate.name = $(`#name_${data[i].id}`).val();
+              customerUpdate.dateOfBirth = $(`#dateOfBirth_${data[i].id}`).val();
+              customerUpdate.gender = $(`#gender_${data[i].id}`).val();
+              customerUpdate.phone = $(`#phone_${data[i].id}`).val();
+              customerUpdate.email = $(`#email_${data[i].id}`).val();
+              customerUpdate.address = $(`#address_${data[i].id}`).val();
+              customerUpdate.type = $(`#type_${data[i].id}`).val();
+              customerUpdate.identityCard = $(`#identityCard_${data[i].id}`).val();
+              customerUpdate.registerDate = $(`#registerDate_${data[i].id}`).val();
 
-                            $.ajax({
-                                type: 'POST',
-                                url: `http://localhost:8081/api/customers/edit`,
-                                contentType: 'application/json',
-                                dataType: 'json',
-                                data: JSON.stringify(customerUpdate),
-                                success: function (response) {
-                                    if (response.status === 'FAIL') {
-                                        isEditCustomerSubmitArr[i] = false;
-                                        $(`#alert_${data[i].id}`).removeClass('d-none')
-                                        $(`#alert_${data[i].id}`).empty();
-                                        $(`#alert_${data[i].id}`).append(`<ul id="errors_${data[i].id}"></ul>`);
-                                        for (let j = 0; j < response.result.length; j++) {
-                                            $(`#errors_${data[i].id}`).append(`<li>${response.result[j].defaultMessage}</li>`)
-                                        }
-                                    } else {
-                                        isEditCustomerSubmitArr[i] = true;
-                                        editCustomerDataArr[i] = response.result;
-                                        $(`#updateCustomerDetailsModel_${data[i].id}`).modal('hide');
-                                        let tds = $(`#row_${data[i].id}`).find('td');
-                                        tds.eq(1).html(response.result.name);
-                                        tds.eq(2).html(response.result.identityCard);
-                                        let detailModal = tds.eq(7).find(`#seeCustomerDetailsModel_${data[i].id}`).eq(0);
-                                        let detailInputs = detailModal.find('input');
-                                        let detailTextArea = detailModal.find('textarea').eq(0);
-                                        detailInputs.eq(1).val(response.result.name);
-                                        detailInputs.eq(2).val(response.result.dateOfBirth);
-                                        detailInputs.eq(3).val(response.result.gender);
-                                        detailInputs.eq(4).val(response.result.phone);
-                                        detailInputs.eq(5).val(response.result.email);
-                                        detailTextArea.eq(0).val(response.result.address);
-                                        detailInputs.eq(6).val(response.result.type);
-                                        detailInputs.eq(7).val(response.result.identityCard);
-                                        detailInputs.eq(8).val(response.result.registerDate);
-                                        let editModal = tds.eq(7).find(`#updateCustomerDetailsModel_${data[i].id}`).eq(0);
-                                        let editInputs = editModal.find('input');
-                                        let editTextArea = editModal.find('textarea').eq(0);
-                                        editInputs.eq(1).val(response.result.name);
-                                        editInputs.eq(2).val(response.result.dateOfBirth);
-                                        editInputs.eq(3).val(response.result.gender);
-                                        editInputs.eq(4).val(response.result.phone);
-                                        editInputs.eq(5).val(response.result.email);
-                                        editTextArea.eq(0).val(response.result.address);
-                                        editInputs.eq(6).val(response.result.type);
-                                        editInputs.eq(7).val(response.result.identityCard);
-                                        editInputs.eq(8).val(response.result.registerDate);
-                                    }
-                                },
-                                error: function (jqXHR, status, error) {
-                                    console.log(error);
-                                }
-                            });
-                        });
-
-                        $(`#deleteSubmit_${data[i].id}`).on('click', function () {
-                            $(`#row_${data[i].id}`).addClass('d-none');
-                            $(`#deleteCustomerModal_${data[i].id}`).modal('hide');
-                        });
-
-                        $(`#updateCustomerDetailsModel_${data[i].id}`).on('hidden.bs.modal', function () {
-                            if (isEditCustomerSubmitArr[i] && $.fn.isUpdateCustomerModalValid(data[i].id)) {
-                                isEditCustomerSubmitArr[i] = false;
-                            } else {
-                                $(`#id_${data[i].id}`).val(editCustomerDataArr[i].id);
-                                $(`#name_${data[i].id}`).val(editCustomerDataArr[i].name);
-                                $(`#dateOfBirth_${data[i].id}`).val(editCustomerDataArr[i].dateOfBirth);
-                                $(`#gender_${data[i].id}`).val(editCustomerDataArr[i].gender);
-                                $(`#phone_${data[i].id}`).val(editCustomerDataArr[i].phone);
-                                $(`#email_${data[i].id}`).val(editCustomerDataArr[i].email);
-                                $(`#address_${data[i].id}`).val(editCustomerDataArr[i].address);
-                                $(`#type_${data[i].id}`).val(editCustomerDataArr[i].type);
-                                $(`#identityCard_${data[i].id}`).val(editCustomerDataArr[i].identityCard);
-                                $(`#registerDate_${data[i].id}`).val(editCustomerDataArr[i].registerDate);
-                            }
-                            $(`#alert_${data[i].id}`).empty();
-                            $(`#alert_${data[i].id}`).addClass('d-none');
-                        });
+              $.ajax({
+                type: 'POST',
+                url: `http://localhost:8081/api/customers/edit`,
+                contentType: 'application/json',
+                dataType: 'json',
+                data: JSON.stringify(customerUpdate),
+                success: function (response) {
+                  if (response.status === 'FAIL') {
+                    isEditCustomerSubmitArr[i] = false;
+                    $(`#alert_${data[i].id}`).removeClass('d-none')
+                    $(`#alert_${data[i].id}`).empty();
+                    $(`#alert_${data[i].id}`).append(
+                        `<ul id="errors_${data[i].id}"></ul>`);
+                    for (let j = 0; j < response.result.length; j++) {
+                      $(`#errors_${data[i].id}`).append(
+                          `<li>${response.result[j].defaultMessage}</li>`)
                     }
+                  } else {
+                    isEditCustomerSubmitArr[i] = true;
+                    editCustomerDataArr[i] = response.result;
+                    $(`#updateCustomerDetailsModel_${data[i].id}`).modal(
+                        'hide');
+                    let tds = $(`#row_${data[i].id}`).find('td');
+                    tds.eq(1).html(response.result.name);
+                    tds.eq(2).html(response.result.identityCard);
+                    let detailModal = tds.eq(7).find(
+                        `#seeCustomerDetailsModel_${data[i].id}`).eq(0);
+                    let detailInputs = detailModal.find('input');
+                    let detailTextArea = detailModal.find('textarea').eq(0);
+                    detailInputs.eq(1).val(response.result.name);
+                    detailInputs.eq(2).val(response.result.dateOfBirth);
+                    detailInputs.eq(3).val(response.result.gender);
+                    detailInputs.eq(4).val(response.result.phone);
+                    detailInputs.eq(5).val(response.result.email);
+                    detailTextArea.eq(0).val(response.result.address);
+                    detailInputs.eq(6).val(response.result.type);
+                    detailInputs.eq(7).val(response.result.identityCard);
+                    detailInputs.eq(8).val(response.result.registerDate);
+                    let editModal = tds.eq(7).find(
+                        `#updateCustomerDetailsModel_${data[i].id}`).eq(0);
+                    let editInputs = editModal.find('input');
+                    let editTextArea = editModal.find('textarea').eq(0);
+                    editInputs.eq(1).val(response.result.name);
+                    editInputs.eq(2).val(response.result.dateOfBirth);
+                    editInputs.eq(3).val(response.result.gender);
+                    editInputs.eq(4).val(response.result.phone);
+                    editInputs.eq(5).val(response.result.email);
+                    editTextArea.eq(0).val(response.result.address);
+                    editInputs.eq(6).val(response.result.type);
+                    editInputs.eq(7).val(response.result.identityCard);
+                    editInputs.eq(8).val(response.result.registerDate);
+                  }
+                },
+                error: function (jqXHR, status, error) {
+                  console.log(error);
                 }
-            }, error: function (jqXHR, status, error) {
-                console.log(error);
+              });
+            });
+
+            $(`#deleteSubmit_${data[i].id}`).on('click', function () {
+              $(`#row_${data[i].id}`).addClass('d-none');
+              $(`#deleteCustomerModal_${data[i].id}`).modal('hide');
+            });
+
+            $(`#updateCustomerDetailsModel_${data[i].id}`).on('hidden.bs.modal',
+                function () {
+                  if (isEditCustomerSubmitArr[i]
+                      && $.fn.isUpdateCustomerModalValid(data[i].id)) {
+                    isEditCustomerSubmitArr[i] = false;
+                  } else {
+                    $(`#id_${data[i].id}`).val(editCustomerDataArr[i].id);
+                    $(`#name_${data[i].id}`).val(editCustomerDataArr[i].name);
+                    $(`#dateOfBirth_${data[i].id}`).val(
+                        editCustomerDataArr[i].dateOfBirth);
+                    $(`#gender_${data[i].id}`).val(
+                        editCustomerDataArr[i].gender);
+                    $(`#phone_${data[i].id}`).val(editCustomerDataArr[i].phone);
+                    $(`#email_${data[i].id}`).val(editCustomerDataArr[i].email);
+                    $(`#address_${data[i].id}`).val(
+                        editCustomerDataArr[i].address);
+                    $(`#type_${data[i].id}`).val(editCustomerDataArr[i].type);
+                    $(`#identityCard_${data[i].id}`).val(
+                        editCustomerDataArr[i].identityCard);
+                    $(`#registerDate_${data[i].id}`).val(
+                        editCustomerDataArr[i].registerDate);
+                  }
+                  $(`#alert_${data[i].id}`).empty();
+                  $(`#alert_${data[i].id}`).addClass('d-none');
+                });
+          }
+        }
+      },
+      error: function (jqXHR, status, error) {
+        console.log(error);
+      }
+    });
+  }
+
+  $.fn.loadSelectData(`${endpoint}/projects`, 'project', 'change');
+  $('#project').on('change', function () {
+    $.fn.loadSelectData(`${endpoint}/buildings/${$(this).val()}`, 'building',
+        'change');
+  });
+  $('#building').on('change', function () {
+    $.fn.loadSelectData(`${endpoint}/floors/${$(this).val()}`, 'floor',
+        'change');
+    $.fn.loadSelectData(`${endpoint}/parking-areas/${$(this).val()}`,
+        'parkingArea', 'change');
+  });
+  $('#floor').on('change', function () {
+    $.fn.loadSelectData(`${endpoint}/apartments/${$(this).val()}`, 'apartment',
+        'change');
+  });
+
+  $('#apartment').on('change', function () {
+    $('#file').val('');
+    $.fn.loadCustomerData(`${endpoint}/apartment_registers/${$(this).val()}`);
+  });
+
+  $('#file').on('change', function () {
+    const formData = new FormData();
+    formData.append('file', $(this)[0].files[0]);
+    $.ajax({
+      type: 'POST',
+      url: `${endpoint}/customers/import-excel`,
+      processData: false,
+      contentType: false,
+      dataType: 'json',
+      data: formData,
+      success: function (data) {
+        console.log(data);
+        if (data.length > 0) {
+          let customerIdList = [];
+          $('#customers').find('tr').each(function () {
+            let customerId = $(this).find('td').eq(0).html();
+            customerIdList.push(customerId);
+          });
+          let customerIdExistedCount = 0;
+          $.each(data, function (index, customer) {
+            if (customerIdList.includes(customer.id)) {
+              customerIdExistedCount += 1;
             }
-        });
-    }
+          });
 
-    $.fn.loadSelectData(`${endpoint}/projects`, 'project', 'change');
-    $('#project').on('change', function () {
-        $.fn.loadSelectData(`${endpoint}/buildings/${$(this).val()}`, 'building', 'change');
-    });
-    $('#building').on('change', function () {
-        $.fn.loadSelectData(`${endpoint}/floors/${$(this).val()}`, 'floor', 'change');
-        $.fn.loadSelectData(`${endpoint}/parking-areas/${$(this).val()}`, 'parkingArea', 'change');
-    });
-    $('#floor').on('change', function () {
-        $.fn.loadSelectData(`${endpoint}/apartments/${$(this).val()}`, 'apartment', 'change');
-    });
-
-    $('#apartment').on('change', function () {
-        $('#file').val('');
-        $.fn.loadCustomerData(`${endpoint}/apartment_registers/${$(this).val()}`);
-    });
-
-    $('#file').on('change', function () {
-        const formData = new FormData();
-        formData.append('file', $(this)[0].files[0]);
-        $.ajax({
-            type: 'POST',
-            url: `${endpoint}/customers/import-excel`,
-            processData: false,
-            contentType: false,
-            dataType: 'json',
-            data: formData,
-            success: function (data) {
-                console.log(data);
-                if (data.length > 0) {
-                    let isEditCustomerSubmitArr = [];
-                    let editCustomerDataArr = [];
-                    for (let i = 0; i < data.length; i++) {
-                        isEditCustomerSubmitArr[i] = false;
-                        editCustomerDataArr[i] = data[i];
-                        $('#customers').append(`
+          if (customerIdExistedCount > 0) {
+            $('#errorContent').html("Some Customer Ids already exist!");
+            $('#errorModal').modal('show');
+          } else {
+            let isEditCustomerSubmitArr = [];
+            let editCustomerDataArr = [];
+            for (let i = 0; i < data.length; i++) {
+              isEditCustomerSubmitArr[i] = false;
+              editCustomerDataArr[i] = data[i];
+              $('#customers').append(`
                         <tr id="row_${data[i].id}">
                             <input type="hidden" class="form-control" id="apartmentRegister_${data[i].id}">
                             <td class="text-success">${data[i].id}</td>
@@ -500,155 +553,178 @@ $(function () {
                         </tr>  
                         `);
 
-                        $(`#editSubmit_${data[i].id}`).on('click', function () {
-                            let customerUpdate = {};
-                            customerUpdate.id = $(`#id_${data[i].id}`).val();
-                            customerUpdate.name = $(`#name_${data[i].id}`).val();
-                            customerUpdate.dateOfBirth = $(`#dateOfBirth_${data[i].id}`).val();
-                            customerUpdate.gender = $(`#gender_${data[i].id}`).val();
-                            customerUpdate.phone = $(`#phone_${data[i].id}`).val();
-                            customerUpdate.email = $(`#email_${data[i].id}`).val();
-                            customerUpdate.address = $(`#address_${data[i].id}`).val();
-                            customerUpdate.type = $(`#type_${data[i].id}`).val() === '' ? 'Cư dân' : $(`#type_${data[i].id}`).val();
-                            customerUpdate.identityCard = $(`#identityCard_${data[i].id}`).val();
-                            customerUpdate.registerDate = $(`#registerDate_${data[i].id}`).val() === '' ? moment().format('YYYY-MM-DD') : $(`#registerDate_${data[i].id}`).val();
+              $(`#editSubmit_${data[i].id}`).on('click', function () {
+                let customerUpdate = {};
+                customerUpdate.id = $(`#id_${data[i].id}`).val();
+                customerUpdate.name = $(`#name_${data[i].id}`).val();
+                customerUpdate.dateOfBirth = $(`#dateOfBirth_${data[i].id}`).val();
+                customerUpdate.gender = $(`#gender_${data[i].id}`).val();
+                customerUpdate.phone = $(`#phone_${data[i].id}`).val();
+                customerUpdate.email = $(`#email_${data[i].id}`).val();
+                customerUpdate.address = $(`#address_${data[i].id}`).val();
+                customerUpdate.type = $(`#type_${data[i].id}`).val() === ''
+                    ? 'Cư dân' : $(`#type_${data[i].id}`).val();
+                customerUpdate.identityCard = $(`#identityCard_${data[i].id}`).val();
+                customerUpdate.registerDate = $(`#registerDate_${data[i].id}`).val()
+                === '' ? moment().format('YYYY-MM-DD')
+                    : $(`#registerDate_${data[i].id}`).val();
 
-                            $.ajax({
-                                type: 'POST',
-                                url: `http://localhost:8081/api/customers/edit`,
-                                contentType: 'application/json',
-                                dataType: 'json',
-                                data: JSON.stringify(customerUpdate),
-                                success: function (response) {
-                                    if (response.status === 'FAIL') {
-                                        isEditCustomerSubmitArr[i] = false;
-                                        $(`#alert_${data[i].id}`).removeClass('d-none')
-                                        $(`#alert_${data[i].id}`).empty();
-                                        $(`#alert_${data[i].id}`).append(`<ul id="errors_${data[i].id}"></ul>`);
-                                        for (let j = 0; j < response.result.length; j++) {
-                                            $(`#errors_${data[i].id}`).append(`<li>${response.result[j].defaultMessage}</li>`)
-                                        }
-                                    } else {
-                                        isEditCustomerSubmitArr[i] = true;
-                                        editCustomerDataArr[i] = response.result;
-                                        $(`#updateCustomerDetailsModel_${data[i].id}`).modal('hide');
-                                        let tds = $(`#row_${data[i].id}`).find('td');
-                                        tds.eq(1).html(response.result.name);
-                                        tds.eq(2).html(response.result.identityCard);
-                                        let detailModal = tds.eq(7).find(`#seeCustomerDetailsModel_${data[i].id}`).eq(0);
-                                        let detailInputs = detailModal.find('input');
-                                        let detailTextArea = detailModal.find('textarea').eq(0);
-                                        detailInputs.eq(1).val(response.result.name);
-                                        detailInputs.eq(2).val(response.result.dateOfBirth);
-                                        detailInputs.eq(3).val(response.result.gender);
-                                        detailInputs.eq(4).val(response.result.phone);
-                                        detailInputs.eq(5).val(response.result.email);
-                                        detailTextArea.eq(0).val(response.result.address);
-                                        detailInputs.eq(7).val(response.result.identityCard);
-                                        let editModal = tds.eq(7).find(`#updateCustomerDetailsModel_${data[i].id}`).eq(0);
-                                        let editInputs = editModal.find('input');
-                                        let editTextArea = editModal.find('textarea').eq(0);
-                                        editInputs.eq(1).val(response.result.name);
-                                        editInputs.eq(2).val(response.result.dateOfBirth);
-                                        editInputs.eq(3).val(response.result.gender);
-                                        editInputs.eq(4).val(response.result.phone);
-                                        editInputs.eq(5).val(response.result.email);
-                                        editTextArea.eq(0).val(response.result.address);
-                                        editInputs.eq(7).val(response.result.identityCard);
-                                    }
-                                },
-                                error: function (jqXHR, status, error) {
-                                    console.log(error);
-                                }
-                            });
-                        });
-
-                        $(`#deleteSubmit_${data[i].id}`).on('click', function () {
-                            $(`#row_${data[i].id}`).addClass('d-none');
-                            $(`#deleteCustomerModal_${data[i].id}`).modal('hide');
-                        });
-
-                        $(`#updateCustomerDetailsModel_${data[i].id}`).on('hidden.bs.modal', function () {
-                            if (isEditCustomerSubmitArr[i] && $.fn.isUpdateExcelCustomerModalValid(data[i].id)) {
-                                isEditCustomerSubmitArr[i] = false;
-                            } else {
-                                $(`#id_${data[i].id}`).val(editCustomerDataArr[i].id);
-                                $(`#name_${data[i].id}`).val(editCustomerDataArr[i].name);
-                                $(`#dateOfBirth_${data[i].id}`).val(editCustomerDataArr[i].dateOfBirth);
-                                $(`#gender_${data[i].id}`).val(editCustomerDataArr[i].gender);
-                                $(`#phone_${data[i].id}`).val(editCustomerDataArr[i].phone);
-                                $(`#email_${data[i].id}`).val(editCustomerDataArr[i].email);
-                                $(`#address_${data[i].id}`).val(editCustomerDataArr[i].address);
-                                $(`#identityCard_${data[i].id}`).val(editCustomerDataArr[i].identityCard);
-                            }
-                            $(`#alert_${data[i].id}`).empty();
-                            $(`#alert_${data[i].id}`).addClass('d-none');
-                        });
+                $.ajax({
+                  type: 'POST',
+                  url: `http://localhost:8081/api/customers/edit`,
+                  contentType: 'application/json',
+                  dataType: 'json',
+                  data: JSON.stringify(customerUpdate),
+                  success: function (response) {
+                    if (response.status === 'FAIL') {
+                      isEditCustomerSubmitArr[i] = false;
+                      $(`#alert_${data[i].id}`).removeClass('d-none')
+                      $(`#alert_${data[i].id}`).empty();
+                      $(`#alert_${data[i].id}`).append(
+                          `<ul id="errors_${data[i].id}"></ul>`);
+                      for (let j = 0; j < response.result.length; j++) {
+                        $(`#errors_${data[i].id}`).append(
+                            `<li>${response.result[j].defaultMessage}</li>`)
+                      }
+                    } else {
+                      isEditCustomerSubmitArr[i] = true;
+                      editCustomerDataArr[i] = response.result;
+                      $(`#updateCustomerDetailsModel_${data[i].id}`).modal(
+                          'hide');
+                      let tds = $(`#row_${data[i].id}`).find('td');
+                      tds.eq(1).html(response.result.name);
+                      tds.eq(2).html(response.result.identityCard);
+                      let detailModal = tds.eq(7).find(
+                          `#seeCustomerDetailsModel_${data[i].id}`).eq(0);
+                      let detailInputs = detailModal.find('input');
+                      let detailTextArea = detailModal.find('textarea').eq(0);
+                      detailInputs.eq(1).val(response.result.name);
+                      detailInputs.eq(2).val(response.result.dateOfBirth);
+                      detailInputs.eq(3).val(response.result.gender);
+                      detailInputs.eq(4).val(response.result.phone);
+                      detailInputs.eq(5).val(response.result.email);
+                      detailTextArea.eq(0).val(response.result.address);
+                      detailInputs.eq(7).val(response.result.identityCard);
+                      let editModal = tds.eq(7).find(
+                          `#updateCustomerDetailsModel_${data[i].id}`).eq(0);
+                      let editInputs = editModal.find('input');
+                      let editTextArea = editModal.find('textarea').eq(0);
+                      editInputs.eq(1).val(response.result.name);
+                      editInputs.eq(2).val(response.result.dateOfBirth);
+                      editInputs.eq(3).val(response.result.gender);
+                      editInputs.eq(4).val(response.result.phone);
+                      editInputs.eq(5).val(response.result.email);
+                      editTextArea.eq(0).val(response.result.address);
+                      editInputs.eq(7).val(response.result.identityCard);
                     }
-                }
-            },
-            error: function (jqXHR, status, error) {
-                console.log(error);
-                $('#errorContent').html('Import Excel Failed!');
-                $('#errorModal').modal('show');
-            }
-        });
-    });
-
-    $('#submit').on('click', function () {
-        let customerRegisters = [];
-        let hostCount = 0;
-        $('#customers').find('tr').each(function () {
-            let tds = $(this).find('td');
-            let modals = tds.eq(7).find('.see-customer-details');
-            let inputs = modals.find('input');
-            let textAreas = modals.find('textarea');
-            let customerRegister = {};
-            customerRegister.apartmentRegisterId = $(this).find('input').eq(0).val();
-            customerRegister.id = inputs.eq(0).val();
-            customerRegister.name = inputs.eq(1).val();
-            customerRegister.dateOfBirth = inputs.eq(2).val();
-            customerRegister.gender = inputs.eq(3).val();
-            customerRegister.phone = inputs.eq(4).val();
-            customerRegister.email = inputs.eq(5).val();
-            customerRegister.address = textAreas.eq(0).val();
-            customerRegister.type = inputs.eq(6).val() === '' ? 'Cư dân' : inputs.eq(6).val();
-            customerRegister.identityCard = inputs.eq(7).val();
-            customerRegister.registerDate = inputs.eq(8).val() === '' ? moment().format('YYYY-MM-DD') : inputs.eq(8).val();
-            customerRegister.host = tds.eq(3).find('input').eq(0).prop('checked');
-            customerRegister.residentCard = tds.eq(4).find('input').eq(0).prop('checked');
-            customerRegister.motorbikeCard = tds.eq(5).find('input').eq(0).prop('checked');
-            customerRegister.carCard = tds.eq(6).find('input').eq(0).prop('checked');
-            customerRegister.projectId = $('#project').val();
-            customerRegister.buildingId = $('#building').val();
-            customerRegister.floorId = $('#floor').val();
-            customerRegister.apartmentId = $('#apartment').val();
-            customerRegister.parkingAreaId = $('#parkingArea').val();
-            customerRegister.deleted = $(this).hasClass('d-none');
-            hostCount = customerRegister.host && !customerRegister.deleted ? hostCount + 1 : hostCount;
-            customerRegisters.push(customerRegister);
-        });
-        console.log(customerRegisters);
-        if (hostCount === 0) {
-            $('#errorContent').html('Host Not Select!');
-            $('#errorModal').modal('show');
-        } else {
-            $.ajax({
-                type: 'POST',
-                url: `${endpoint}/customers/add`,
-                contentType: 'application/json',
-                dataType: 'json',
-                data: JSON.stringify(customerRegisters),
-                success: function () {
-                    $('#file').val('');
-                    $.fn.loadCustomerData(`${endpoint}/apartment_registers/${$("#apartment").val()}`);
-                },
-                error: function (jqXHR, status, error) {
+                  },
+                  error: function (jqXHR, status, error) {
                     console.log(error);
-                    $('#errorContent').html('Register Residents Failed!');
-                    $('#errorModal').modal('show');
-                }
-            });
+                  }
+                });
+              });
+
+              $(`#deleteSubmit_${data[i].id}`).on('click', function () {
+                $(`#row_${data[i].id}`).addClass('d-none');
+                $(`#deleteCustomerModal_${data[i].id}`).modal('hide');
+              });
+
+              $(`#updateCustomerDetailsModel_${data[i].id}`).on(
+                  'hidden.bs.modal', function () {
+                    if (isEditCustomerSubmitArr[i]
+                        && $.fn.isUpdateExcelCustomerModalValid(data[i].id)) {
+                      isEditCustomerSubmitArr[i] = false;
+                    } else {
+                      $(`#id_${data[i].id}`).val(editCustomerDataArr[i].id);
+                      $(`#name_${data[i].id}`).val(editCustomerDataArr[i].name);
+                      $(`#dateOfBirth_${data[i].id}`).val(
+                          editCustomerDataArr[i].dateOfBirth);
+                      $(`#gender_${data[i].id}`).val(
+                          editCustomerDataArr[i].gender);
+                      $(`#phone_${data[i].id}`).val(
+                          editCustomerDataArr[i].phone);
+                      $(`#email_${data[i].id}`).val(
+                          editCustomerDataArr[i].email);
+                      $(`#address_${data[i].id}`).val(
+                          editCustomerDataArr[i].address);
+                      $(`#identityCard_${data[i].id}`).val(
+                          editCustomerDataArr[i].identityCard);
+                    }
+                    $(`#alert_${data[i].id}`).empty();
+                    $(`#alert_${data[i].id}`).addClass('d-none');
+                  });
+            }
+          }
         }
+      },
+      error: function (jqXHR, status, error) {
+        console.log(error);
+        $('#errorContent').html('Import Excel Failed!');
+        $('#errorModal').modal('show');
+      }
     });
+  });
+
+  $('#submit').on('click', function () {
+    let customerRegisters = [];
+    let hostCount = 0;
+    $('#customers').find('tr').each(function () {
+      let tds = $(this).find('td');
+      let modals = tds.eq(7).find('.see-customer-details');
+      let inputs = modals.find('input');
+      let textAreas = modals.find('textarea');
+      let customerRegister = {};
+      customerRegister.apartmentRegisterId = $(this).find('input').eq(0).val();
+      customerRegister.id = inputs.eq(0).val();
+      customerRegister.name = inputs.eq(1).val();
+      customerRegister.dateOfBirth = inputs.eq(2).val();
+      customerRegister.gender = inputs.eq(3).val();
+      customerRegister.phone = inputs.eq(4).val();
+      customerRegister.email = inputs.eq(5).val();
+      customerRegister.address = textAreas.eq(0).val();
+      customerRegister.type = inputs.eq(6).val() === '' ? 'Cư dân' : inputs.eq(
+          6).val();
+      customerRegister.identityCard = inputs.eq(7).val();
+      customerRegister.registerDate = inputs.eq(8).val() === ''
+          ? moment().format('YYYY-MM-DD') : inputs.eq(8).val();
+      customerRegister.host = tds.eq(3).find('input').eq(0).prop('checked');
+      customerRegister.residentCard = tds.eq(4).find('input').eq(0).prop(
+          'checked');
+      customerRegister.motorbikeCard = tds.eq(5).find('input').eq(0).prop(
+          'checked');
+      customerRegister.carCard = tds.eq(6).find('input').eq(0).prop('checked');
+      customerRegister.projectId = $('#project').val();
+      customerRegister.buildingId = $('#building').val();
+      customerRegister.floorId = $('#floor').val();
+      customerRegister.apartmentId = $('#apartment').val();
+      customerRegister.parkingAreaId = $('#parkingArea').val();
+      customerRegister.deleted = $(this).hasClass('d-none');
+      hostCount = customerRegister.host && !customerRegister.deleted ? hostCount
+          + 1 : hostCount;
+      customerRegisters.push(customerRegister);
+    });
+    console.log(customerRegisters);
+    if (hostCount === 0) {
+      $('#errorContent').html('Host Not Select!');
+      $('#errorModal').modal('show');
+    } else {
+      $.ajax({
+        type: 'POST',
+        url: `${endpoint}/customers/add`,
+        contentType: 'application/json',
+        dataType: 'json',
+        data: JSON.stringify(customerRegisters),
+        success: function () {
+          $('#file').val('');
+          $.fn.loadCustomerData(
+              `${endpoint}/apartment_registers/${$("#apartment").val()}`);
+        },
+        error: function (jqXHR, status, error) {
+          console.log(error);
+          $('#errorContent').html('Register Residents Failed!');
+          $('#errorModal').modal('show');
+        }
+      });
+    }
+  });
 });

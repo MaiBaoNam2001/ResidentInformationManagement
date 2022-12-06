@@ -7,37 +7,45 @@ import org.springframework.stereotype.Component;
 @Component
 public class ApartmentRegisterFilter {
 
-  public static boolean filterByParkingAreaIdAndLicensePlate(ApartmentRegister apartmentRegister,
+  public boolean filterByParkingAreaIdAndLicensePlate(ApartmentRegister apartmentRegister,
       String parkingAreaId, String licensePlate) {
-    String parkingAreaIdByMotorbikeCard = apartmentRegister.getMotorbikeCard().get("project")
+    final String parkingAreaIdByMotorbikeCard = apartmentRegister.getMotorbikeCard().get("project")
         .get("range").get("parking_area").get("id").asText();
-    String parkingAreaIdByCarCard = apartmentRegister.getCarCard().get("project").get("range")
+    final String parkingAreaIdByCarCard = apartmentRegister.getCarCard().get("project").get("range")
         .get("parking_area").get("id").asText();
-    boolean isMotorbikeCardActive = apartmentRegister.getMotorbikeCard().get("active").asBoolean();
-    boolean isCarCardActive = apartmentRegister.getCarCard().get("active").asBoolean();
-    boolean isMotorbikeCardRegisteredByLicensePlate = apartmentRegister.getCustomer()
+    final boolean isMotorbikeCardActive = apartmentRegister.getMotorbikeCard().get("active")
+        .asBoolean();
+    final boolean isCarCardActive = apartmentRegister.getCarCard().get("active").asBoolean();
+    final boolean isMotorbikeCardRegisteredByLicensePlate = apartmentRegister.getCustomer()
         .getParkingRegisters().stream().anyMatch(
             parkingRegister -> parkingRegister.getLicensePlate().equals(licensePlate)
                 && parkingRegister.getVehicleType().equalsIgnoreCase("xe máy"));
-    boolean isCarCardRegisteredByLicensePlate = apartmentRegister.getCustomer()
+    final boolean isCarCardRegisteredByLicensePlate = apartmentRegister.getCustomer()
         .getParkingRegisters().stream().anyMatch(
             parkingRegister -> parkingRegister.getLicensePlate().equals(licensePlate)
                 && parkingRegister.getVehicleType().equalsIgnoreCase("xe hơi"));
-    return (Objects.equals(parkingAreaIdByMotorbikeCard, parkingAreaId) && isMotorbikeCardActive
-        && isMotorbikeCardRegisteredByLicensePlate) || (
-        Objects.equals(parkingAreaIdByCarCard, parkingAreaId) && isCarCardActive
-            && isCarCardRegisteredByLicensePlate);
+    final boolean isParkingAreaIdExistedByMotorbikeCard = Objects.equals(
+        parkingAreaIdByMotorbikeCard, parkingAreaId);
+    final boolean isParkingAreaIdExistedByCarCard = Objects.equals(parkingAreaIdByCarCard,
+        parkingAreaId);
+    return (isParkingAreaIdExistedByMotorbikeCard && isMotorbikeCardActive
+        && isMotorbikeCardRegisteredByLicensePlate) || (isParkingAreaIdExistedByCarCard
+        && isCarCardActive && isCarCardRegisteredByLicensePlate);
   }
 
-  public static boolean filterByParkingAreaId(ApartmentRegister apartmentRegister,
-      String parkingAreaId) {
-    String parkingAreaIdByMotorbikeCard = apartmentRegister.getMotorbikeCard().get("project")
+  public boolean filterByParkingAreaId(ApartmentRegister apartmentRegister, String parkingAreaId) {
+    final String parkingAreaIdByMotorbikeCard = apartmentRegister.getMotorbikeCard().get("project")
         .get("range").get("parking_area").get("id").asText();
-    String parkingAreaIdByCarCard = apartmentRegister.getCarCard().get("project").get("range")
+    final String parkingAreaIdByCarCard = apartmentRegister.getCarCard().get("project").get("range")
         .get("parking_area").get("id").asText();
-    boolean isMotorbikeCardActive = apartmentRegister.getMotorbikeCard().get("active").asBoolean();
-    boolean isCarCardActive = apartmentRegister.getCarCard().get("active").asBoolean();
-    return (Objects.equals(parkingAreaIdByMotorbikeCard, parkingAreaId) && isMotorbikeCardActive)
-        || (Objects.equals(parkingAreaIdByCarCard, parkingAreaId) && isCarCardActive);
+    final boolean isMotorbikeCardActive = apartmentRegister.getMotorbikeCard().get("active")
+        .asBoolean();
+    final boolean isCarCardActive = apartmentRegister.getCarCard().get("active").asBoolean();
+    final boolean isParkingAreaIdExistedByMotorbikeCard = Objects.equals(
+        parkingAreaIdByMotorbikeCard, parkingAreaId);
+    final boolean isParkingAreaIdExistedByCarCard = Objects.equals(parkingAreaIdByCarCard,
+        parkingAreaId);
+    return (isParkingAreaIdExistedByMotorbikeCard && isMotorbikeCardActive) || (
+        isParkingAreaIdExistedByCarCard && isCarCardActive);
   }
 }
